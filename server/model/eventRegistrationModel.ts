@@ -2,7 +2,7 @@
 // EVENT REGISTRATION MODEL
 // ========================================
 import {prisma} from "~/server/config/db";
-import {Prisma} from "~/lib/generated/prisma";
+import {Prisma} from "@prisma/client";
 
 export class EventRegistrationModel {
     // Create Registration

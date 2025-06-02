@@ -2,8 +2,7 @@
 // USER MODEL
 // ========================================
 import {prisma} from "~/server/config/db";
-import {$Enums, Prisma} from "~/lib/generated/prisma";
-import UserRole = $Enums.UserRole;
+import {Prisma, UserRole} from "@prisma/client";
 
 export class UserModel {
     // Create User

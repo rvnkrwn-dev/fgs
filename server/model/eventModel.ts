@@ -3,8 +3,7 @@
 // ========================================
 
 import {prisma} from "~/server/config/db";
-import {$Enums, Prisma} from "~/lib/generated/prisma";
-import EventStatus = $Enums.EventStatus;
+import {EventStatus, Prisma} from "@prisma/client";
 
 export class EventModel {
     // Create Event
@@ -166,7 +165,7 @@ export class EventModel {
     }
 
     // Get Events by Status
-    static async getEventsByStatus(status: EventStatus) {
+    static async getEventsByStatus(status: any) {
         return prisma.event.findMany({
             where: { status },
             include: {

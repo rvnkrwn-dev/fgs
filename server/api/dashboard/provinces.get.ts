@@ -84,13 +84,13 @@ export default defineEventHandler(async (event) => {
             }
         }
 
-    } catch (error) {
+    } catch (error: any) {
         console.error('Error fetching province statistics:', error)
 
         return {
             statusCode: 500,
             message: 'Internal server error',
-            error: error.message
+            error: error?.message
         }
     }
 })
