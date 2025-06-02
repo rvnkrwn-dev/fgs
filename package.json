@@ -3,7 +3,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "nuxt build",
+    "prisma:generate": "NODE_OPTIONS='--max-old-space-size=768' yarn prisma generate",
+    "build:nuxt": "NODE_OPTIONS='--max-old-space-size=1024' yarn nuxt build",
+    "build": "yarn prisma:generate && sleep 5 && yarn build:nuxt",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
@@ -14,7 +16,7 @@
     "node": "22.x"
   },
   "dependencies": {
-    "@prisma/client": "6.8.2",
+    "@prisma/client": "5.19.1",
     "@tailwindcss/vite": "^4.1.8",
     "@tanstack/vue-table": "^8.21.3",
     "@types/jsonwebtoken": "^9.0.9",
@@ -25,7 +27,7 @@
     "jsonwebtoken": "^9.0.2",
     "lucide-vue-next": "^0.511.0",
     "nuxt": "^3.17.4",
-    "prisma": "^6.8.2",
+    "prisma": "5.19.1",
     "reka-ui": "^2.3.0",
     "shadcn-nuxt": "2.2.0",
     "tailwind-merge": "^3.3.0",
