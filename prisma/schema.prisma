@@ -1,0 +1,97 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+//
+// ENUMS
+//
+
+enum UserRole {
+  ADMIN
+  USER
+}
+
+enum EventStatus {
+  DRAFT
+  PUBLISHED
+  COMPLETED
+  CANCELLED
+}
+
+//
+// MODELS
+//
+
+// Admin users only
+model User {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  name          String
+  password_hash String
+  role          UserRole @default(USER)
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+
+  events_created Event[]
+  RefreshToken   RefreshToken[]
+}
+
+model RefreshToken {
+  id         Int      @id @default(autoincrement())
+  user_id    String
+  user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  token      String   @db.VarChar(255)
+  created_at DateTime @default(now())
+}
+
+// Events managed by admin
+model Event {
+  id          String      @id @default(cuid())
+  title       String
+  description String      @db.LongText
+  start_date  DateTime
+  end_date    DateTime
+  location    String
+  banner_url  String? // Banner utama untuk header
+  cover_url   String? // Cover image untuk thumbnail/card
+  status      EventStatus @default(DRAFT)
+  created_at  DateTime    @default(now())
+  updated_at  DateTime    @updatedAt
+
+  created_by User   @relation(fields: [creator_id], references: [id], onDelete: Cascade)
+  creator_id String
+
+  registrations EventRegistration[]
+}
+
+// Free registration data (no login required)
+model EventRegistration {
+  id       String @id @default(cuid())
+  event_id String
+  event    Event  @relation(fields: [event_id], references: [id], onDelete: Cascade)
+
+  // Registration data
+  full_name   String
+  whatsapp    String
+  province    String
+  city        String // kota
+  district    String // kecamatan
+  postal_code String // kode pos
+
+  registered_at DateTime @default(now())
+
+  @@index([event_id])
+  @@index([registered_at])
+}
